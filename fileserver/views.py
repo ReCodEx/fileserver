@@ -30,7 +30,7 @@ def store_submission(id):
     os.makedirs(job_dir)
 
     # Save each received file
-    for name in request.form.keys():
+    for name, content in request.form.iteritems():
         # Get the directory of the file path and create it, if necessary
         dirname = os.path.dirname(name)
         if dirname:
@@ -38,7 +38,7 @@ def store_submission(id):
 
         # Save the file
         with open(os.path.join(job_dir, name), 'w') as f:
-            f.write(request.form[name])
+            f.write(content)
 
     # Make an archive that contains the submitted files
     archive_path = os.path.join(dirs.archive_dir, id + '.tar.gz')
