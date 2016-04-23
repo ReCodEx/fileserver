@@ -48,6 +48,7 @@ def store_submission(id):
     # Return the path to the archive
     return json.dumps({
         "archive_path": url_for('get_submission_archive', id = id, ext = 'tar.gz')
+        "result_path": url_for('store_result', id = id, ext = 'zip')
     })
 
 @app.route('/results/<id>.<ext>', methods = ('GET', 'PUT'))
