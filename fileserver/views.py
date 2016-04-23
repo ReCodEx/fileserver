@@ -30,7 +30,7 @@ def get_result_archive(id, ext):
     )
 
 @app.route('/tasks/<hash>')
-def get_task_file(prefix, hash):
+def get_task_file(hash):
     """
     Get a task file identified by a SHA-1 hash of its content
     """
