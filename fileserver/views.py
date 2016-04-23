@@ -15,7 +15,7 @@ def get_submission_archive(id, ext):
 
     return send_from_directory(
         dirs.archive_dir, 
-        "{0}.{1}".format(file, ext)
+        "{0}.{1}".format(id, ext)
     )
 
 @app.route('/tasks/<prefix>/<hash>')
