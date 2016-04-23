@@ -7,7 +7,7 @@ import json
 import tarfile
 import hashlib
 
-@app.route('/submission_archives/<id>.<ext>', methods = ('GET'))
+@app.route('/submission_archives/<id>.<ext>')
 def get_submission_archive(id, ext):
     """
     Get a submission archive.
