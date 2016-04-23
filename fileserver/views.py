@@ -5,6 +5,7 @@ from flask import request, url_for, send_from_directory
 import os
 import json
 import tarfile
+import hashlib
 
 @app.route('/submission_archives/<id>.<ext>', methods = ('GET'))
 def get_submission_archive(id, ext):
@@ -15,6 +16,17 @@ def get_submission_archive(id, ext):
     return send_from_directory(
         dirs.archive_dir, 
         "{0}.{1}".format(file, ext)
+    )
+
+@app.route('/tasks/<prefix>/<hash>')
+def get_task_file(prefix, hash):
+    """
+    Get a task file identified by a SHA-1 hash of its content
+    """
+
+    return send_from_directory(
+        os.path.join(dirs.task_dir, os.path.realpath(prefix)), 
+        hash
     )
 
 @app.route('/submissions/<id>', methods = ('GET', 'POST'))
@@ -30,7 +42,7 @@ def store_submission(id):
     os.makedirs(job_dir)
 
     # Save each received file
-    for name, content in request.form.iteritems():
+    for name, content in request.form.items():
         # Get the directory of the file path and create it, if necessary
         dirname = os.path.dirname(name)
         if dirname:
@@ -47,7 +59,7 @@ def store_submission(id):
 
     # Return the path to the archive
     return json.dumps({
-        "archive_path": url_for('get_submission_archive', id = id, ext = 'tar.gz')
+        "archive_path": url_for('get_submission_archive', id = id, ext = 'tar.gz'),
         "result_path": url_for('store_result', id = id, ext = 'zip')
     })
 
@@ -72,4 +84,21 @@ def store_task_files():
     """
     Store supplementary task files under hashes of their contents.
     """
-    pass
+
+    files = {}
+
+    for name, content in request.form.items():
+        hash = hashlib.sha1(content.encode()).hexdigest()
+        prefix = hash[0]
+        files[name] = url_for("get_task_file", prefix = prefix, hash = hash)
+
+        file_dir = os.path.join(dirs.task_dir, prefix)
+        os.makedirs(file_dir, exist_ok = True)
+
+        with open(os.path.join(file_dir, hash), "wb") as f:
+            f.write(content.encode())
+
+    return json.dumps({
+        "result": "OK",
+        "files": files
+    })
