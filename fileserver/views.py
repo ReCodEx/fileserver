@@ -29,14 +29,14 @@ def get_result_archive(id, ext):
         "{0}.{1}".format(id, ext)
     )
 
-@app.route('/tasks/<prefix>/<hash>')
+@app.route('/tasks/<hash>')
 def get_task_file(prefix, hash):
     """
     Get a task file identified by a SHA-1 hash of its content
     """
 
     return send_from_directory(
-        os.path.join(dirs.task_dir, os.path.realpath(prefix)), 
+        os.path.join(dirs.task_dir, hash[0]),
         hash
     )
 
@@ -101,7 +101,7 @@ def store_task_files():
     for name, content in request.form.items():
         hash = hashlib.sha1(content.encode()).hexdigest()
         prefix = hash[0]
-        files[name] = url_for("get_task_file", prefix = prefix, hash = hash)
+        files[name] = url_for("get_task_file", hash = hash)
 
         file_dir = os.path.join(dirs.task_dir, prefix)
         os.makedirs(file_dir, exist_ok = True)
