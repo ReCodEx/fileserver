@@ -18,6 +18,17 @@ def get_submission_archive(id, ext):
         "{0}.{1}".format(id, ext)
     )
 
+@app.route('/results/<id>.<ext>')
+def get_result_archive(id, ext):
+    """
+    Get a result archive.
+    """
+
+    return send_from_directory(
+        dirs.result_dir,
+        "{0}.{1}".format(id, ext)
+    )
+
 @app.route('/tasks/<prefix>/<hash>')
 def get_task_file(prefix, hash):
     """
