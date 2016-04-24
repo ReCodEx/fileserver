@@ -1,5 +1,6 @@
 from fileserver import app
 from fileserver import dirs
+from .utils import hash_file
 
 from flask import request, url_for, send_from_directory
 import os
@@ -53,15 +54,15 @@ def store_submission(id):
     os.makedirs(job_dir)
 
     # Save each received file
-    for name, content in request.form.items():
+    for name, content in request.files.items():
         # Get the directory of the file path and create it, if necessary
         dirname = os.path.dirname(name)
         if dirname:
             os.makedirs(os.path.join(job_dir, dirname), exist_ok = True)
 
         # Save the file
-        with open(os.path.join(job_dir, name), 'w') as f:
-            f.write(content)
+        with open(os.path.join(job_dir, name), 'wb') as f:
+            content.save(f)
 
     # Make an archive that contains the submitted files
     archive_path = os.path.join(dirs.archive_dir, id + '.tar.gz')
@@ -98,8 +99,8 @@ def store_task_files():
 
     files = {}
 
-    for name, content in request.form.items():
-        hash = hashlib.sha1(content.encode()).hexdigest()
+    for name, content in request.files.items():
+        hash = hash_file(hashlib.sha1(), content).hexdigest()
         prefix = hash[0]
         files[name] = url_for("get_task_file", hash = hash)
 
@@ -107,7 +108,8 @@ def store_task_files():
         os.makedirs(file_dir, exist_ok = True)
 
         with open(os.path.join(file_dir, hash), "wb") as f:
-            f.write(content.encode())
+            content.seek(0)
+            content.save(f)
 
     return json.dumps({
         "result": "OK",
