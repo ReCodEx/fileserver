@@ -5,8 +5,8 @@ from .utils import hash_file
 from flask import request, url_for, send_from_directory
 import os
 import json
-import tarfile
 import hashlib
+import shutil
 
 @app.route('/submission_archives/<id>.<ext>')
 def get_submission_archive(id, ext):
@@ -65,13 +65,11 @@ def store_submission(id):
             content.save(f)
 
     # Make an archive that contains the submitted files
-    archive_path = os.path.join(dirs.archive_dir, id + '.tar.gz')
-    with tarfile.open(archive_path, "w:gz") as archive:
-        archive.add(job_dir, arcname = id)
+    shutil.make_archive(os.path.join(dirs.archive_dir, id), "zip", job_dir)
 
     # Return the path to the archive
     return json.dumps({
-        "archive_path": url_for('get_submission_archive', id = id, ext = 'tar.gz'),
+        "archive_path": url_for('get_submission_archive', id = id, ext = 'zip'),
         "result_path": url_for('store_result', id = id, ext = 'zip')
     })
 
