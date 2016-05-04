@@ -27,7 +27,7 @@ class TestStoreSubmission(unittest.TestCase):
         job_id = "job-id-xxxx"
 
         expected_response = {
-            "archive_path": {"function": "get_submission_archive", "id": job_id, "ext": "tar.gz"},
+            "archive_path": {"function": "get_submission_archive", "id": job_id, "ext": "zip"},
             "result_path": {"function": "store_result", "id": job_id, "ext": "zip"}
         }
 
@@ -37,7 +37,7 @@ class TestStoreSubmission(unittest.TestCase):
         job_dir = os.path.join(dirs.submission_dir, job_id)
         self.assertTrue(os.path.isdir(job_dir))
 
-        self.assertTrue(os.path.exists(os.path.join(dirs.archive_dir, job_id + ".tar.gz")))
+        self.assertTrue(os.path.exists(os.path.join(dirs.archive_dir, job_id + ".zip")))
 
 
 if __name__ == '__main__':
