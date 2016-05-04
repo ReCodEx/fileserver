@@ -1,26 +1,27 @@
-from fileserver import app
-from fileserver import dirs
+from fileserver.DirectoryStructure import DirectoryStructure
 from .utils import hash_file
 
-from flask import request, url_for, send_from_directory
+from flask import request, url_for, send_from_directory, Blueprint
 import os
 import json
 import hashlib
 import shutil
 
-@app.route('/submission_archives/<id>.<ext>')
-def get_submission_archive(id, ext):
+fs = Blueprint("fileserver", __name__)
+
+@fs.route('/submission_archives/<id>.<ext>')
+def get_submission_archive(id, ext, dirs: DirectoryStructure):
     """
     Get a submission archive.
     """
 
     return send_from_directory(
-        dirs.archive_dir, 
+        dirs.archive_dir,
         "{0}.{1}".format(id, ext)
     )
 
-@app.route('/results/<id>.<ext>')
-def get_result_archive(id, ext):
+@fs.route('/results/<id>.<ext>')
+def get_result_archive(id, ext, dirs: DirectoryStructure):
     """
     Get a result archive.
     """
@@ -30,8 +31,8 @@ def get_result_archive(id, ext):
         "{0}.{1}".format(id, ext)
     )
 
-@app.route('/tasks/<hash>')
-def get_task_file(hash):
+@fs.route('/tasks/<hash>')
+def get_task_file(hash, dirs: DirectoryStructure):
     """
     Get a task file identified by a SHA-1 hash of its content
     """
@@ -41,8 +42,8 @@ def get_task_file(hash):
         hash
     )
 
-@app.route('/submissions/<id>', methods = ('GET', 'POST'))
-def store_submission(id):
+@fs.route('/submissions/<id>', methods = ('GET', 'POST'))
+def store_submission(id, dirs: DirectoryStructure):
     """
     Store files submitted by a user and create an archive for workers convenience.
     Expects that the body of the POST request uses file paths as keys and the 
@@ -69,12 +70,12 @@ def store_submission(id):
 
     # Return the path to the archive
     return json.dumps({
-        "archive_path": url_for('get_submission_archive', id = id, ext = 'zip'),
-        "result_path": url_for('store_result', id = id, ext = 'zip')
+        "archive_path": url_for('fileserver.get_submission_archive', id = id, ext = 'zip'),
+        "result_path": url_for('fileserver.store_result', id = id, ext = 'zip')
     })
 
-@app.route('/results/<id>.<ext>', methods = ('GET', 'PUT'))
-def store_result(id, ext):
+@fs.route('/results/<id>.<ext>', methods = ('GET', 'PUT'))
+def store_result(id, ext, dirs: DirectoryStructure):
     """
     Store the result data of an evaluation.
     This should be done by a worker that processes the submission.
@@ -89,8 +90,8 @@ def store_result(id, ext):
         "result": "OK"
     })
 
-@app.route('/tasks', methods = ('GET', 'POST'))
-def store_task_files():
+@fs.route('/tasks', methods = ('GET', 'POST'))
+def store_task_files(dirs: DirectoryStructure):
     """
     Store supplementary task files under hashes of their contents.
     """
@@ -100,7 +101,7 @@ def store_task_files():
     for name, content in request.files.items():
         hash = hash_file(hashlib.sha1(), content).hexdigest()
         prefix = hash[0]
-        files[name] = url_for("get_task_file", hash = hash)
+        files[name] = url_for("fileserver.get_task_file", hash = hash)
 
         file_dir = os.path.join(dirs.task_dir, prefix)
         os.makedirs(file_dir, exist_ok = True)
