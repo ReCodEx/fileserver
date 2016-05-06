@@ -2,12 +2,11 @@ from flask_script import Manager, Server
 import signal
 
 
-def create_app(config_path):
+def create_app(working_directory):
     from flask import Flask
     from flask_injector import FlaskInjector
     from .views import fs
 
-    config = load_config(config_path)
     app = Flask(__name__)
     app.register_blueprint(fs)
 
@@ -16,24 +15,12 @@ def create_app(config_path):
 
         binder.bind(
             DirectoryStructure,
-            to = DirectoryStructure(config.working_directory)
+            to = DirectoryStructure(working_directory)
         )
 
     FlaskInjector(app, modules = [dirs], use_annotations = True)
 
     return app
-
-
-def load_config(path):
-    from .Config import Config
-
-    if path is None:
-        config = Config()
-    else:
-        with open(path) as f:
-            config = Config(f)
-
-    return config
 
 
 class RunServer(Server):
@@ -47,6 +34,6 @@ class RunServer(Server):
         super().__call__(app, host, port, use_debugger, use_reloader, threaded, processes, passthrough_errors)
 
 manager = Manager(create_app)
-manager.add_option("--config", "-c", dest = "config_path", help = "Path to the configuration file", default = None)
+manager.add_option("--directory", dest = "working_directory", help = "The directory where files are stored", default = None)
 manager.add_command("runserver", RunServer())
 
