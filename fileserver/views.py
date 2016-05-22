@@ -51,7 +51,7 @@ def store_submission(id, dirs: DirectoryStructure):
     """
 
     # Make a separate directory for the submitted files
-    job_dir = os.path.join(dirs.submission_dir, id, id)
+    job_dir = os.path.join(dirs.submission_dir, id)
     os.makedirs(job_dir)
 
     # Save each received file
@@ -66,7 +66,7 @@ def store_submission(id, dirs: DirectoryStructure):
             content.save(f)
 
     # Make an archive that contains the submitted files
-    shutil.make_archive(os.path.join(dirs.archive_dir, id), "zip", os.path.join(dirs.submission_dir, id))
+    shutil.make_archive(os.path.join(dirs.archive_dir, id), "zip", root_dir = dirs.submission_dir, base_dir = id)
 
     # Return the path to the archive
     return json.dumps({
