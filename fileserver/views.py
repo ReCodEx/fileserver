@@ -52,7 +52,7 @@ def store_submission(id, dirs: DirectoryStructure):
 
     # Make a separate directory for the submitted files
     job_dir = os.path.join(dirs.submission_dir, id)
-    os.makedirs(job_dir)
+    os.makedirs(job_dir, exist_ok = True)
 
     # Save each received file
     for name, content in request.files.items():
