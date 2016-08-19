@@ -1,6 +1,8 @@
 from flask_script import Manager, Server
 import signal
 
+__version__ = "0.1.0"
+
 
 def create_app(working_directory):
     from flask import Flask
