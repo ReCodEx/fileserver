@@ -26,7 +26,7 @@ class TestHashFile(unittest.TestCase):
         self.assertEqual(expected.hexdigest(), actual.hexdigest())
 
     def test_small(self):
-        data = io.BytesIO(b"" * 100)
+        data = io.BytesIO(b"a" * 100)
         expected = hashlib.sha1(data.read())
 
         data.seek(0)
