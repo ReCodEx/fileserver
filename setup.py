@@ -6,7 +6,7 @@ from fileserver import __version__
 
 setup(name='recodex-fileserver',
       version=__version__,
-      description='Store and serverReCodEx submissions and other files via HTTP',
+      description='Store and serve ReCodEx submissions and other files via HTTP',
       author='Jan Buchar',
       author_email='',
       url='https://github.com/ReCodEx/fileserver',
