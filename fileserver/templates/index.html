@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ReCodEx Fileserver</title>
+</head>
+<body>
+    <h1>ReCodEx Fileserver</h1>
+    <p>This is running ReCodEx Fileserver version {{ version }}.</p>
+    <br><br>
+    <h2>Usage statistics:</h2>
+    <table>
+        <thead>
+            <tr>
+                <td><b>Item</b></td>
+                <td><b>Files</b></td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item, count in stats %}
+            <tr>
+                <td>{{ item }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br><br>
+    <p>Source code with issue tracking is located on <a href="https://github.com/ReCodEx/fileserver">GitHub</a>.
+    Feel free to improve this project and send a pull request. Some documentation is available on
+    <a href="https://github.com/ReCodEx/GlobalWiki/wiki">GitHub Wiki</a>.</p>
+</body>
+</html>
