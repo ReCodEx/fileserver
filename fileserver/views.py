@@ -32,6 +32,7 @@ def get_result_archive(id, ext, dirs: DirectoryStructure):
     )
 
 @fs.route('/tasks/<hash>')
+@fs.route('/exercises/<hash>')
 def get_task_file(hash, dirs: DirectoryStructure):
     """
     Get a task file identified by a SHA-1 hash of its content
@@ -91,6 +92,7 @@ def store_result(id, ext, dirs: DirectoryStructure):
     })
 
 @fs.route('/tasks', methods = ('GET', 'POST'))
+@fs.route('/exercises', methods = ('GET', 'POST'))
 def store_task_files(dirs: DirectoryStructure):
     """
     Store supplementary task files under hashes of their contents.
@@ -105,6 +107,9 @@ def store_task_files(dirs: DirectoryStructure):
 
         file_dir = os.path.join(dirs.task_dir, prefix)
         os.makedirs(file_dir, exist_ok = True)
+
+        if os.path.exists(os.path.join(file_dir, hash)):
+            continue
 
         with open(os.path.join(file_dir, hash), "wb") as f:
             content.seek(0)
