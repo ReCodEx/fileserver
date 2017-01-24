@@ -17,7 +17,7 @@ class DirectoryStructure:
         self.result_dir = os.path.join(root, "results")
         os.makedirs(self.result_dir, exist_ok=True)
 
-        self.task_dir = os.path.join(root, "tasks")
+        self.task_dir = os.path.join(root, "exercises")
         os.makedirs(self.task_dir, exist_ok=True)
 
     def get_submissions_count(self):
