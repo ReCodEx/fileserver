@@ -15,9 +15,12 @@ Prefix: %{_prefix}
 BuildArch: noarch
 Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/fileserver
-BuildRequires: systemd python3-pip
-Requires: systemd httpd python3 python3-pip
+BuildRequires: systemd
+%{?fedora:BuildRequires: python3-pip}
+Requires: systemd httpd
 Requires: uwsgi uwsgi-router-static uwsgi-router-rewrite uwsgi-plugin-python3
+%{?fedora:Requires: python3 python3-pip}
+%{?rhel:Requires: python34 python34-setuptools}
 
 %description
 Backend part of ReCodEx programmer testing solution.
@@ -50,6 +53,9 @@ exit 0
 %pre
 getent group recodex >/dev/null || groupadd -r recodex
 getent passwd recodex >/dev/null || useradd -r -g recodex -d %{_sysconfdir}/recodex -s /sbin/nologin -c "ReCodEx Code Examiner" recodex
+%if 0%{?rhel}
+	easy_install-3.4 pip
+%endif
 python3 -m pip install -r %{buildroot}/opt/recodex-fileserver/requirements.txt
 exit 0
 
