@@ -107,8 +107,11 @@ def store_result(id, ext, dirs: DirectoryStructure):
     """
 
     path = os.path.join(dirs.result_dir, "{0}.{1}".format(id, ext))
-    with open(path, 'wb') as f:
+    path_tmp = path + ".part"
+    with open(path_tmp, 'wb') as f:
         f.write(request.data)
+
+    os.replace(path_tmp, path)
 
     return json.dumps({
         "result": "OK"
