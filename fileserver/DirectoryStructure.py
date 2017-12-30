@@ -8,6 +8,8 @@ class DirectoryStructure:
             self.tmp = tempfile.TemporaryDirectory()
             root = self.tmp.name
 
+        self.root = root
+
         self.submission_dir = os.path.join(root, "submissions")
         os.makedirs(self.submission_dir, exist_ok=True)
 

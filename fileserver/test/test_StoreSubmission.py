@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 from werkzeug.datastructures import ImmutableMultiDict
 from fileserver.DirectoryStructure import DirectoryStructure
 
-from fileserver.views import store_submission
+from fileserver import create_app
 
 
 def url_for(function, **kwargs):
@@ -18,10 +18,9 @@ class TestStoreSubmission(unittest.TestCase):
     @patch('fileserver.views.request')
     @patch('fileserver.views.url_for', side_effect = url_for)
     def test_basic(self, mock_request, mock_url_for):
-        mock_request.form = ImmutableMultiDict([
-            ("foo.txt", "foocontent"),
-            ("bar/baz/bah.txt", "bahcontent")
-        ])
+        dirs = DirectoryStructure()
+        app = create_app(dirs.root)
+        client = app.test_client()
 
         job_id = "job-id-xxxx"
 
@@ -30,9 +29,11 @@ class TestStoreSubmission(unittest.TestCase):
             "result_path": {"function": "fileserver.store_result", "id": job_id, "ext": "zip"}
         }
 
-        dirs = DirectoryStructure()
+        actual_response = json.loads(client.post("/submissions/" + job_id, data=ImmutableMultiDict([
+            ("foo.txt", "foocontent"),
+            ("bar/baz/bah.txt", "bahcontent")
+        ])).data)
 
-        actual_response = json.loads(store_submission(job_id, dirs))
         self.assertEqual(expected_response, actual_response)
 
         job_dir = os.path.join(dirs.submission_dir, job_id)
