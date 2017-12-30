@@ -8,7 +8,7 @@ import json
 import hashlib
 import shutil
 
-<<<<<<< Updated upstream
+
 def create_fileserver_blueprint(dirs: DirectoryStructure):
     fs = Blueprint("fileserver", __name__)
 
