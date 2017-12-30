@@ -1,41 +1,15 @@
-from flask_script import Manager, Server
-import signal
-
-__version__ = "1.0.0"
+__version__ = "1.2.1"
 
 
 def create_app(working_directory):
     from flask import Flask
-    from flask_injector import FlaskInjector
-    from .views import fs
+    from .views import create_fileserver_blueprint
+    from .DirectoryStructure import DirectoryStructure
 
     app = Flask(__name__)
-    app.register_blueprint(fs)
 
-    def dirs(binder):
-        from .DirectoryStructure import DirectoryStructure
-
-        binder.bind(
-            DirectoryStructure,
-            to=DirectoryStructure(working_directory)
-        )
-
-    FlaskInjector(app, modules=[dirs], use_annotations=True)
+    dirs = DirectoryStructure(working_directory)
+    app.register_blueprint(create_fileserver_blueprint(dirs))
 
     return app
-
-
-class RunServer(Server):
-    def __call__(self, app, host, port, use_debugger, use_reloader, threaded, processes, passthrough_errors):
-        def shutdown(*args, **kwargs):
-            raise KeyboardInterrupt
-
-        signal.signal(signal.SIGINT, shutdown)
-        signal.signal(signal.SIGTERM, shutdown)
-
-        super().__call__(app, host, port, use_debugger, use_reloader, threaded, processes, passthrough_errors)
-
-manager = Manager(create_app)
-manager.add_option("--directory", dest="working_directory", help="The directory where files are stored", default=None)
-manager.add_command("runserver", RunServer())
 

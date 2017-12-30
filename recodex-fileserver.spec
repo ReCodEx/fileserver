@@ -1,6 +1,6 @@
 %define name recodex-fileserver
-%define version 1.0.0
-%define unmangled_version 1.0.0
+%define version 1.2.1
+%define unmangled_version 1.2.1
 %define release 1
 
 Summary: ReCodEx fileserver component
