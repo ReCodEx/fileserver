@@ -15,9 +15,8 @@ def url_for(function, **kwargs):
 
 
 class TestStoreSubmission(unittest.TestCase):
-    @patch('fileserver.views.request')
     @patch('fileserver.views.url_for', side_effect = url_for)
-    def test_basic(self, mock_request, mock_url_for):
+    def test_basic(self, mock_url_for):
         dirs = DirectoryStructure()
         app = create_app(dirs.root)
         client = app.test_client()
@@ -32,7 +31,7 @@ class TestStoreSubmission(unittest.TestCase):
         actual_response = json.loads(client.post("/submissions/" + job_id, data=ImmutableMultiDict([
             ("foo.txt", "foocontent"),
             ("bar/baz/bah.txt", "bahcontent")
-        ])).data)
+        ])).data.decode())
 
         self.assertEqual(expected_response, actual_response)
 
