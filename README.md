@@ -3,8 +3,12 @@
 Status](https://img.shields.io/travis/ReCodEx/fileserver/master.svg?label=Build%20status)](https://travis-ci.org/ReCodEx/fileserver)
 [![Wiki](https://img.shields.io/badge/docs-wiki-orange.svg)](https://github.com/ReCodEx/wiki/wiki)
 
-An app that serves as storage for submissions and supplementary files for 
-assignments. The files are exposed via HTTP.
+The fileserver component provides a shared file storage between the frontend and
+the backend. It is written in Python 3 using Flask web framework. Fileserver
+stores files in configurable filesystem directory, provides file deduplication
+and HTTP access. To keep the stored data safe, the fileserver should not be
+visible from public internet. Instead, it should be accessed indirectly through
+the REST API.
 
 ## Installation
 
@@ -13,9 +17,9 @@ assignments. The files are exposed via HTTP.
 Follows description for CentOS which will do all steps as described in _Manual Installation_.
 
 ```
-$ yum install yum-plugin-copr
-$ yum copr enable semai/ReCodEx
-$ yum install recodex-fileserver
+# yum install yum-plugin-copr
+# yum copr enable semai/ReCodEx
+# yum install recodex-fileserver
 ```
 
 ### Manual Installation
@@ -115,4 +119,4 @@ dependencies for the correct version.
 
 ## Documentation
 
-Feel free to read the documentation on [our wiki](https://github.com/ReCodEx/wiki/wiki/Fileserver).
+Feel free to read the documentation on [our wiki](https://github.com/ReCodEx/wiki/wiki).
