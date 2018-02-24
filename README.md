@@ -2,6 +2,7 @@
 [![Build 
 Status](https://img.shields.io/travis/ReCodEx/fileserver/master.svg?label=Build%20status)](https://travis-ci.org/ReCodEx/fileserver)
 [![Wiki](https://img.shields.io/badge/docs-wiki-orange.svg)](https://github.com/ReCodEx/wiki/wiki)
+[![GitHub release](https://img.shields.io/github/release/recodex/fileserver.svg)](https://github.com/ReCodEx/wiki/wiki/Changelog)
 
 The fileserver component provides a shared file storage between the frontend and
 the backend. It is written in Python 3 using Flask web framework. Fileserver
