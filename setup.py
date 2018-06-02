@@ -21,5 +21,7 @@ setup(name='recodex-fileserver',
                    "Programming Language :: Python :: 3.4",
                    "Programming Language :: Python :: 3.5"],
       packages=['fileserver'],
+      setup_requires=['pytest-runner'],
+      tests_require=['pytest', 'pytest-mock', 'pytest-flask'],
       entry_points={'console_scripts': ['recodex-fileserver = fileserver.py']}
       )
