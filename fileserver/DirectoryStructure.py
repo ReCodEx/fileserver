@@ -34,5 +34,8 @@ class DirectoryStructure:
     def get_results_count(self):
         return len(os.listdir(self.result_dir))
 
+    def get_attachments_count(self):
+        return len(os.listdir(self.attachment_dir))
+
     def get_tasks_count(self):
         return sum([len(files) for r, d, files in os.walk(self.task_dir)])

@@ -3,7 +3,6 @@ from fileserver.DirectoryStructure import DirectoryStructure
 from .utils import hash_file
 
 from flask import request, url_for, send_from_directory, Blueprint, render_template, send_file, jsonify
-from tempfile import NamedTemporaryFile
 import os
 import hashlib
 import shutil
@@ -22,7 +21,8 @@ def create_fileserver_blueprint(dirs: DirectoryStructure):
             ("Results", dirs.get_results_count()),
             ("Submission archives", dirs.get_archives_count()),
             ("Submissions", dirs.get_submissions_count()),
-            ("Tasks", dirs.get_tasks_count())
+            ("Attachments", dirs.get_attachments_count()),
+            ("Exercise files", dirs.get_tasks_count())
         ]
         return render_template('index.html',
                                version=fileserver.__version__,
@@ -64,6 +64,14 @@ def create_fileserver_blueprint(dirs: DirectoryStructure):
             os.path.join(dirs.task_dir, hash[0]),
             hash
         )
+
+    @fs.route('/attachments/<uuid>')
+    def get_attachment_files(uuid):
+        """
+        Get an attachment file.
+        """
+
+        return send_from_directory(dirs.attachment_dir, uuid)
 
     @fs.route('/submissions/<id>', methods=('GET', 'POST'))
     def store_submission(id):
@@ -140,6 +148,23 @@ def create_fileserver_blueprint(dirs: DirectoryStructure):
         return jsonify({
             "result": "OK",
             "files": files
+        })
+
+    @fs.route('/attachments/<id>', methods = ('PUT', ))
+    def store_attachment_file(id):
+        """
+        Store an attachment file for an exercise.
+        """
+
+        path = os.path.join(dirs.attachment_dir, id)
+        path_tmp = path + ".part"
+        with open(path_tmp, 'wb') as f:
+            f.write(request.data)
+
+        os.replace(path_tmp, path)
+
+        return jsonify({
+            "result": "OK"
         })
 
     return fs
