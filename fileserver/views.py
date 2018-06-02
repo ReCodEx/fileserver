@@ -2,9 +2,9 @@ import fileserver
 from fileserver.DirectoryStructure import DirectoryStructure
 from .utils import hash_file
 
-from flask import request, url_for, send_from_directory, Blueprint, render_template
+from flask import request, url_for, send_from_directory, Blueprint, render_template, send_file, jsonify
+from tempfile import NamedTemporaryFile
 import os
-import json
 import hashlib
 import shutil
 
@@ -28,18 +28,19 @@ def create_fileserver_blueprint(dirs: DirectoryStructure):
                                version=fileserver.__version__,
                                stats=stats)
 
-
     @fs.route('/submission_archives/<id>.<ext>')
     def get_submission_archive(id, ext):
         """
         Get a submission archive.
         """
 
-        return send_from_directory(
-            dirs.archive_dir,
-            "{0}.{1}".format(id, ext)
-        )
+        path = os.path.join(dirs.archive_dir, id)  + ".zip"
 
+        if not os.path.exists(path):
+            shutil.make_archive(os.path.splitext(path)[0], "zip", root_dir=dirs.submission_dir, base_dir=id)
+
+        # Send the submission archive
+        return send_file(path, attachment_filename="{0}.{1}".format(id, ext), mimetype="application/zip")
 
     @fs.route('/results/<id>.<ext>')
     def get_result_archive(id, ext):
@@ -52,7 +53,6 @@ def create_fileserver_blueprint(dirs: DirectoryStructure):
             "{0}.{1}".format(id, ext)
         )
 
-
     @fs.route('/tasks/<hash>')
     @fs.route('/exercises/<hash>')
     def get_task_file(hash):
@@ -64,7 +64,6 @@ def create_fileserver_blueprint(dirs: DirectoryStructure):
             os.path.join(dirs.task_dir, hash[0]),
             hash
         )
-
 
     @fs.route('/submissions/<id>', methods=('GET', 'POST'))
     def store_submission(id):
@@ -89,15 +88,11 @@ def create_fileserver_blueprint(dirs: DirectoryStructure):
             with open(os.path.join(job_dir, name), 'wb') as f:
                 content.save(f)
 
-        # Make an archive that contains the submitted files
-        shutil.make_archive(os.path.join(dirs.archive_dir, id), "zip", root_dir=dirs.submission_dir, base_dir=id)
-
         # Return the path to the archive
-        return json.dumps({
+        return jsonify({
             "archive_path": url_for('fileserver.get_submission_archive', id=id, ext='zip'),
             "result_path": url_for('fileserver.store_result', id=id, ext='zip')
         })
-
 
     @fs.route('/results/<id>.<ext>', methods=('GET', 'PUT'))
     def store_result(id, ext):
@@ -114,7 +109,7 @@ def create_fileserver_blueprint(dirs: DirectoryStructure):
 
         os.replace(path_tmp, path)
 
-        return json.dumps({
+        return jsonify({
             "result": "OK"
         })
 
@@ -142,7 +137,7 @@ def create_fileserver_blueprint(dirs: DirectoryStructure):
                 content.seek(0)
                 content.save(f)
 
-        return json.dumps({
+        return jsonify({
             "result": "OK",
             "files": files
         })
