@@ -1,8 +1,8 @@
 %define name recodex-fileserver
 %define short_name fileserver
 %define version 1.2.1
-%define unmangled_version f6424325b666d71a3dc35b90497a41303db3d3f8
-%define release 3
+%define unmangled_version c39f70599729194699c078b5a2fa27e404aa1df7
+%define release 4
 
 Summary: ReCodEx fileserver component
 Name: %{name}
@@ -16,11 +16,12 @@ BuildArch: noarch
 Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/fileserver
 BuildRequires: systemd
-%{?fedora:BuildRequires: python3-pip}
+%{?fedora:BuildRequires: python3-devel python3-pip}
+%{?rhel:BuildRequires: python34-devel python34-pip}
 Requires: systemd httpd
 Requires: uwsgi uwsgi-router-static uwsgi-router-rewrite uwsgi-plugin-python3
-%{?fedora:Requires: python3 python3-pip}
-%{?rhel:Requires: python34 python34-setuptools}
+%{?fedora:Requires: python3 python3-pip python3-flask python3-click}
+%{?rhel:Requires: python34 python34-pip}
 
 Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
 
@@ -48,9 +49,8 @@ exit 0
 
 %post
 %if 0%{?rhel}
-	easy_install-3.4 pip
+	python3 -m pip install -r /opt/recodex-fileserver/requirements.txt
 %endif
-python3 -m pip install -r /opt/recodex-fileserver/requirements.txt
 %systemd_post 'uwsgi.service'
 %systemd_post 'httpd.service'
 
