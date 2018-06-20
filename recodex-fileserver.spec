@@ -20,7 +20,7 @@ BuildRequires: systemd
 %{?rhel:BuildRequires: python34-devel python34-pip}
 Requires: systemd httpd
 Requires: uwsgi uwsgi-router-static uwsgi-router-rewrite uwsgi-plugin-python3
-%{?fedora:Requires: python3 python3-pip python3-flask python3-click}
+%{?fedora:Requires: python3 python3-flask python3-click}
 %{?rhel:Requires: python34 python34-pip}
 
 Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz

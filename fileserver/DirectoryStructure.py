@@ -22,6 +22,9 @@ class DirectoryStructure:
         self.task_dir = os.path.join(root, "exercises")
         os.makedirs(self.task_dir, exist_ok=True)
 
+        self.attachment_dir = os.path.join(root, "attachments")
+        os.makedirs(self.attachment_dir, exist_ok=True)
+
     def get_submissions_count(self):
         return len(os.listdir(self.submission_dir))
 
@@ -30,6 +33,9 @@ class DirectoryStructure:
 
     def get_results_count(self):
         return len(os.listdir(self.result_dir))
+
+    def get_attachments_count(self):
+        return len(os.listdir(self.attachment_dir))
 
     def get_tasks_count(self):
         return sum([len(files) for r, d, files in os.walk(self.task_dir)])
