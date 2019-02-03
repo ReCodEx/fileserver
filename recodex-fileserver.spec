@@ -17,11 +17,11 @@ Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/fileserver
 BuildRequires: systemd
 %{?fedora:BuildRequires: python3-devel python3-pip}
-%{?rhel:BuildRequires: python34-devel python34-pip}
+%{?rhel:BuildRequires: python36-devel python36-pip}
 Requires: systemd httpd
-Requires: uwsgi uwsgi-router-static uwsgi-router-rewrite uwsgi-plugin-python3
-%{?fedora:Requires: python3 python3-flask python3-click}
-%{?rhel:Requires: python34 python34-pip}
+Requires: uwsgi uwsgi-router-static uwsgi-router-rewrite
+%{?fedora:Requires: python3 python3-flask python3-click uwsgi-plugin-python3}
+%{?rhel:Requires: python36 python36-pip uwsgi-plugin-python36}
 
 Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
 
@@ -49,7 +49,7 @@ exit 0
 
 %post
 %if 0%{?rhel}
-	python3 -m pip install -r /opt/recodex-fileserver/requirements.txt
+	python3.6 -m pip install -r /opt/recodex-fileserver/requirements.txt
 %endif
 %systemd_post 'uwsgi.service'
 %systemd_post 'httpd.service'
