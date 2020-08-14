@@ -2,7 +2,7 @@
 %define short_name fileserver
 %define version 1.2.1
 %define unmangled_version c39f70599729194699c078b5a2fa27e404aa1df7
-%define release 4
+%define release 8
 
 Summary: ReCodEx fileserver component
 Name: %{name}
