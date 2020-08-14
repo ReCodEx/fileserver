@@ -2,7 +2,7 @@
 %define short_name fileserver
 %define version 1.2.1
 %define unmangled_version c39f70599729194699c078b5a2fa27e404aa1df7
-%define release 8
+%define release 9
 
 Summary: ReCodEx fileserver component
 Name: %{name}
@@ -17,11 +17,11 @@ Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/fileserver
 BuildRequires: systemd
 %{?fedora:BuildRequires: python3-devel python3-pip}
-%{?rhel:BuildRequires: python36-devel python36-pip}
+%{?rhel:BuildRequires: python38-devel python38-pip}
 Requires: systemd httpd
 Requires: uwsgi uwsgi-router-static uwsgi-router-rewrite
 %{?fedora:Requires: python3 python3-flask python3-click uwsgi-plugin-python3}
-%{?rhel:Requires: python36 python36-pip uwsgi-plugin-python36}
+%{?rhel:Requires: python38 python38-pip uwsgi-plugin-python3}
 
 Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
 

@@ -15,12 +15,13 @@ the REST API.
 
 ### COPR Installation
 
-Follows description for CentOS which will do all steps as described in _Manual Installation_.
+Follows description for CentOS 8 which will do all steps as described in _Manual Installation_.
 
 ```
-# yum install yum-plugin-copr
-# yum copr enable semai/ReCodEx
-# yum install recodex-fileserver
+# dnf install yum-plugin-copr
+# dnf copr enable semai/ReCodEx
+# dnf install https://extras.getpagespeed.com/release-el8-latest.rpm
+# dnf install recodex-fileserver
 ```
 
 ### Manual Installation
