@@ -16,6 +16,7 @@ the REST API.
 ### COPR Installation
 
 Follows description for CentOS 8 which will do all steps as described in _Manual Installation_.
+Note that we are no longer supporting Centos 7 via RPM packages.
 
 ```
 # dnf install yum-plugin-copr
