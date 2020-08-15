@@ -1,8 +1,8 @@
 %define name recodex-fileserver
 %define short_name fileserver
 %define version 1.2.2
-%define unmangled_version 7d9f435f19f24a909106a2badd7ff5a108068f59
-%define release 2
+%define unmangled_version 939f6a299814167e8451180ba050bcd03f02c0fb
+%define release 4
 
 Summary: ReCodEx fileserver component
 Name: %{name}
@@ -64,7 +64,7 @@ exit 0
 %files
 %defattr(-,root,root)
 %dir /opt/recodex-fileserver
-%dir %{_localstatedir}/recodex-fileserver
+%dir %attr(755,recodex,recodex) %{_localstatedir}/recodex-fileserver
 /opt/recodex-fileserver/*
 /opt/recodex-fileserver/.*
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/010-fileserver.conf
