@@ -1,8 +1,8 @@
 %define name recodex-fileserver
 %define short_name fileserver
 %define version 1.2.2
-%define unmangled_version c39f70599729194699c078b5a2fa27e404aa1df7
-%define release 1
+%define unmangled_version 7d9f435f19f24a909106a2badd7ff5a108068f59
+%define release 2
 
 Summary: ReCodEx fileserver component
 Name: %{name}
@@ -39,8 +39,6 @@ mkdir -p %{buildroot}/%{_localstatedir}/recodex-fileserver
 mkdir -p %{buildroot}/%{_sysconfdir}/httpd/conf.d/
 cp install/010-fileserver.conf %{buildroot}/%{_sysconfdir}/httpd/conf.d/
 cp install/recodex_htpasswd %{buildroot}/%{_sysconfdir}/httpd/
-mkdir -p %{buildroot}/var/recodex-fileserver-data
-chown recodex:recodex %{buildroot}/var/recodex-fileserver-data
 exit 0
 
 %clean
