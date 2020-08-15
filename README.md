@@ -15,13 +15,11 @@ the REST API.
 
 ### COPR Installation
 
-Follows description for CentOS 8 which will do all steps as described in _Manual Installation_.
-Note that we are no longer supporting Centos 7 via RPM packages.
+Follows description for CentOS which will do all steps as described in _Manual Installation_.
 
 ```
 # dnf install yum-plugin-copr
 # dnf copr enable semai/ReCodEx
-# dnf install https://extras.getpagespeed.com/release-el8-latest.rpm
 # dnf install recodex-fileserver
 ```
 
@@ -53,8 +51,7 @@ For simple development usage, it is possible to run the fileserver in the
 command line. Allowed options are described below.
 
 ```
-usage: fileserver.py [--directory WORKING_DIRECTORY]
-                     {runserver,shell} ...
+usage: fileserver.py {runserver,shell} [--directory WORKING_DIRECTORY] ...
 ```
 
 - **runserver** argument starts the Flask development server (i.e. `app.run()`).
