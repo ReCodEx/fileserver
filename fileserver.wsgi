@@ -1,11 +1,11 @@
 import sys
 import os
 
-script_path = os.path.realpath(sys.argv[0])
-sys.path.append(os.path.dirname(script_path))
+# Patch that is necessary for mod_wsgi
+sys.path.append('/opt/recodex-fileserver')
 
 from fileserver import create_app
 
 def application(environ, start_response):
-    flask_app = create_app(os.environ.get("WORKING_DIRECTORY"))
+    flask_app = create_app(environ.get("WORKING_DIRECTORY"))
     return flask_app(environ, start_response)

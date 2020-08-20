@@ -15,13 +15,26 @@ the REST API.
 
 ### COPR Installation
 
-Follows description for CentOS which will do all steps as described in _Manual Installation_.
+The RPM packages available for CentOS and Fedora will install recodex-fileserver
+into `/opt` directory and update Apache configuration to deploy the fileserver
+as `mod_wsgi` service. The actual working directory will be in `/var/recodex-fileserver`.
 
 ```
-# yum install yum-plugin-copr
-# yum copr enable semai/ReCodEx
-# yum install recodex-fileserver
+# dnf install yum-plugin-copr
+# dnf copr enable semai/ReCodEx
+# dnf install recodex-fileserver
 ```
+
+After installation you should check the Apache configuration and possibly update
+it (e.g., change the port on which the service is running). It is **strongly
+recommended** to change the HTTP authentication credentials, which are stored in
+`/etc/httpd/recodex_htpasswd` (use Apache `htpasswd` CLI tool).
+
+Finally, you need to restart HTTP service.
+```
+# systemctl restart httpd
+```
+
 
 ### Manual Installation
 
@@ -51,8 +64,7 @@ For simple development usage, it is possible to run the fileserver in the
 command line. Allowed options are described below.
 
 ```
-usage: fileserver.py [--directory WORKING_DIRECTORY]
-                     {runserver,shell} ...
+usage: fileserver.py {runserver,shell} [--directory WORKING_DIRECTORY] ...
 ```
 
 - **runserver** argument starts the Flask development server (i.e. `app.run()`).
@@ -60,10 +72,10 @@ usage: fileserver.py [--directory WORKING_DIRECTORY]
 - **shell** argument instructs Flask to run a Python shell inside application
   context.
 
-Simple development server on port 9999 can be run as
+Simple development server can be run as
 
 ```
-$ python3 fileserver.py runserver 9999
+$ python3 fileserver.py runserver
 ```
 
 When run like this command, the fileserver creates a temporary directory where
