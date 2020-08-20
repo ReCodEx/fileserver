@@ -1,8 +1,8 @@
 %define name recodex-fileserver
 %define short_name fileserver
 %define version 1.2.2
-%define unmangled_version 34083b6e206e63283d99e43d4541ff4ee41bd232
-%define release 5
+%define unmangled_version 2bf4af19f7d0f3b8fa8ae7ce2140a985fba136ef
+%define release 6
 
 Summary: ReCodEx fileserver component
 Name: %{name}
@@ -25,7 +25,7 @@ Requires: systemd httpd
 Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
 
 %description
-Fileserver is a backend part of ReCodEx code examiner, an educational application for evaluating programming assignments. 
+Fileserver is a backend part of ReCodEx code examiner, an educational application for evaluating programming assignments. It works as internal repository for data which neede to be kept in files (submissions, exercise test files, ...).
 
 %prep
 %setup -n %{short_name}-%{unmangled_version}
